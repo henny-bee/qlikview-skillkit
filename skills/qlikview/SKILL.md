@@ -1,6 +1,10 @@
 ---
 name: qlikview
-description: Build, fix and automate QlikView Desktop (.qvw) apps from Claude Code. Use for any QlikView task, such as a load script, generating test or demo data, a data model with multiple fact tables or a link table, set analysis, measures or variables, KPIs, dashboards and sheets (D-A-R), charts, cyclic or drill groups, bookmarks, fixing wrong measures or "Error in expression", or reviewing a QlikView app. Drives QlikView 12 through COM from PowerShell (WSL or Windows) with a tested toolkit.
+description: Build, fix and automate QlikView Desktop (.qvw) apps. Use for any QlikView task, such as a load script, generating test or demo data, a data model with multiple fact tables or a link table, set analysis, measures or variables, KPIs, dashboards and sheets (D-A-R), charts, cyclic or drill groups, bookmarks, fixing wrong measures or "Error in expression", or reviewing a QlikView app. Drives QlikView 12 through COM from PowerShell (WSL or Windows) with a tested toolkit.
+license: MIT
+compatibility: Full use needs Windows with QlikView Desktop 12.x and an agent that can run Windows PowerShell 5.1 (natively or from WSL). Without that, the reference docs still help with load scripts, set analysis and data models.
+metadata:
+  version: "1.0"
 ---
 
 # QlikView skill
@@ -8,7 +12,10 @@ description: Build, fix and automate QlikView Desktop (.qvw) apps from Claude Co
 You build and fix QlikView Desktop apps by driving the running QlikView through COM from PowerShell. Everything here was
 learned while building a 1M-row, 7-sheet D-A-R sales app (`examples/sales-demo/`). Reuse it; do not rediscover it.
 
-`<skill>` below means the folder that contains this file (usually `~/.claude/skills/qlikview`).
+`<skill>` below means the folder that contains this file (e.g. `~/.claude/skills/qlikview` or `~/.agents/skills/qlikview`).
+
+If you cannot run PowerShell on the Windows machine where QlikView runs (e.g. a web chat), still use this skill: write the
+load script, expressions and build scripts from `reference/` and `examples/`, and tell the user which `toolkit/` commands to run.
 
 ## 1. Respond first, then plan, then build
 1. **Answer immediately** from this skill: what you will build, the sheets and objects, the data model and the risks. Don't start with broad research.
@@ -38,7 +45,7 @@ This creates `<project>/_build/` with `tools/` (toolkit), `script/`, `spec/` (me
 | 4. Verify data | Row counts, totals, identities, no `$Syn` tables, the demo stories show, deterministic | `tools/verify.ps1 -Tsv spec/metrics.tsv` |
 | 5. Groups and bookmarks | Cyclic/drill groups from JSON; story bookmarks | `tools/create-groups.ps1`, `examples/.../create-bookmarks.ps1` |
 | 6. Sheets | One idempotent `build/build-SH_<TAG>.ps1` per sheet, Dashboard first | `templates/build-SH_TEMPLATE.ps1`, `toolkit/lib-*.ps1` |
-| 7. Look | Screenshot every sheet and **look at it** (Read tool). Fix, rebuild, look again | `tools/shot.ps1 -Sheet SH_X` |
+| 7. Look | Screenshot every sheet and **look at it** (open the PNG as an image). Fix, rebuild, look again | `tools/shot.ps1 -Sheet SH_X` |
 | 8. Gate | Error scan + screenshots + save. Then a human-eye pass with the checklist in `reference/layout-standard.md` | `tools/final-check.ps1` |
 
 Checkpoint after each milestone: `Save-QvCheckpoint -Doc $doc -Label <name>` (copies the .qvw to `_build/backup/`).
