@@ -7,7 +7,7 @@ $b = Join-Path $proj '_build'
 foreach ($d in 'tools','script','spec','build','backup','logs','shots','status','qa') { New-Item -ItemType Directory -Force -Path (Join-Path $b $d) | Out-Null }
 Copy-Item -Force (Join-Path $PSScriptRoot 'toolkit\*') (Join-Path $b 'tools')
 # starter templates (never overwrite your own files)
-foreach ($t in @(@('app-settings.ps1','build'), @('build-SH_TEMPLATE.ps1','build'), @('metrics.tsv','spec'), @('groups.json','spec'))) {
+foreach ($t in @(@('app-settings.ps1','build'), @('build-SH_TEMPLATE.ps1','build'), @('build-SH_INSIGHTS.ps1','build'), @('metrics.tsv','spec'), @('groups.json','spec'))) {
     $dst = Join-Path (Join-Path $b $t[1]) $t[0]
     if (-not (Test-Path $dst)) { Copy-Item (Join-Path $PSScriptRoot "templates\$($t[0])") $dst }
 }

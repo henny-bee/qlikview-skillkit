@@ -25,14 +25,26 @@ skills/qlikview/
 │   ├── lib-eng.ps1          #   calendar, statistics box, table box, container, bookmark object, line/arrow, pivot layout
 │   ├── reload.ps1 eval.ps1 verify.ps1 create-groups.ps1 shot.ps1 final-check.ps1
 │   └── qvrun.sh             #   run any .ps1 from WSL / Git Bash with a timeout
-├── templates/               # starter build script, app settings, metrics.tsv, groups.json
+├── templates/               # starter build scripts (D-A-R sheet, insight page), app settings, metrics.tsv, groups.json
 ├── reference/
 │   ├── com-cheatsheet.md    # COM methods + property paths (captions, formats, totals, widths, colours, groups, bookmarks)
 │   ├── gotchas.md           # every bug that cost time, with cause and fix
 │   ├── script-patterns.md   # deterministic test data, link table, master calendar, set-analysis variable templates
-│   └── layout-standard.md   # D-A-R layout, grid, palette, zero-defect checklist
+│   ├── layout-standard.md   # D-A-R layout, grid, palette, zero-defect checklist
+│   └── layouts.md           # other forms: insight page, executive one-pager, exception dashboard, scorecard
 └── examples/sales-demo/     # complete reference app: 1M-row generated load script, 7 sheet builders, specs, QA checks, screenshots
 ```
+
+## Dashboard layouts
+The default is a **D-A-R** app (Dashboard → Analysis → Reports). Ask for another form and the agent switches layout:
+| Ask for | You get |
+|---|---|
+| "show me the most important things", "highlights" | **Insight page**: the agent analyses the data, proposes 5–7 ranked findings for your OK, then builds one card per finding (headline sentence with the number + a chart that proves it) |
+| "one page for management" | **Executive one-pager**: 4–6 KPIs, a trend, a mix chart, a compact table |
+| "only show what is off target" | **Exception dashboard**: only the items below target, sorted by gap |
+| "one page per sales rep / customer" | **Scorecard**: one sheet driven by a single selection |
+
+Details and grids: `skills/qlikview/reference/layouts.md`. Sketches or screenshots of the layout you want work best.
 
 ## Which tools can use it
 | Mode | Where | What works |

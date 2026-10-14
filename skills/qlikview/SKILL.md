@@ -1,6 +1,6 @@
 ---
 name: qlikview
-description: Build, fix and automate QlikView Desktop (.qvw) apps. Use for any QlikView task, such as a load script, generating test or demo data, a data model with multiple fact tables or a link table, set analysis, measures or variables, KPIs, dashboards and sheets (D-A-R), charts, cyclic or drill groups, bookmarks, fixing wrong measures or "Error in expression", or reviewing a QlikView app. Drives QlikView 12 through COM from PowerShell (WSL or Windows) with a tested toolkit.
+description: Build, fix and automate QlikView Desktop (.qvw) apps. Use for any QlikView task, such as a load script, generating test or demo data, a data model with multiple fact tables or a link table, set analysis, measures or variables, KPIs, dashboards and sheets (D-A-R apps, insight pages that show the most important findings, executive one-pagers, exception dashboards, scorecards), charts, cyclic or drill groups, bookmarks, fixing wrong measures or "Error in expression", or reviewing a QlikView app. Drives QlikView 12 through COM from PowerShell (WSL or Windows) with a tested toolkit.
 license: MIT
 compatibility: Full use needs Windows with QlikView Desktop 12.x and an agent that can run Windows PowerShell 5.1 (natively or from WSL). Without that, the reference docs still help with load scripts, set analysis and data models.
 metadata:
@@ -19,8 +19,11 @@ load script, expressions and build scripts from `reference/` and `examples/`, an
 
 ## 1. Respond first, then plan, then build
 1. **Answer immediately** from this skill: what you will build, the sheets and objects, the data model and the risks. Don't start with broad research.
-2. **Write a short plan** (phases, files, sheets, checks, rough time) and **wait for approval** when the user asks for a plan or the task is big.
-3. Only read `reference/*.md` and `examples/` for the specific detail you need.
+2. **Pick the layout** from `reference/layouts.md`. D-A-R is the default; use the **insight page**, executive one-pager, exception
+   dashboard or per-entity scorecard when the user asks for "the important things", "one page", "only the problems" or "per rep".
+   For an insight page, analyse the data first and get the ranked insight list approved before building.
+3. **Write a short plan** (phases, files, sheets, checks, rough time) and **wait for approval** when the user asks for a plan or the task is big.
+4. Only read `reference/*.md` and `examples/` for the specific detail you need.
 
 ## 2. Environment check (30 seconds)
 * QlikView Desktop 12.x is at `C:\Program Files\QlikView\Qv.exe`. COM ProgID: `QlikTech.QlikView`.
@@ -44,7 +47,7 @@ This creates `<project>/_build/` with `tools/` (toolkit), `script/`, `spec/` (me
 | 3. Reload | Test reload with a small volume first, then the full one | `tools/reload.ps1 -Set @{vCfgRows='50000'}` |
 | 4. Verify data | Row counts, totals, identities, no `$Syn` tables, the demo stories show, deterministic | `tools/verify.ps1 -Tsv spec/metrics.tsv` |
 | 5. Groups and bookmarks | Cyclic/drill groups from JSON; story bookmarks | `tools/create-groups.ps1`, `examples/.../create-bookmarks.ps1` |
-| 6. Sheets | One idempotent `build/build-SH_<TAG>.ps1` per sheet, Dashboard first | `templates/build-SH_TEMPLATE.ps1`, `toolkit/lib-*.ps1` |
+| 6. Sheets | One idempotent `build/build-SH_<TAG>.ps1` per sheet, in the chosen layout (Dashboard or insight page first) | `templates/build-SH_TEMPLATE.ps1` (D-A-R), `templates/build-SH_INSIGHTS.ps1` (insight page), `toolkit/lib-*.ps1` |
 | 7. Look | Screenshot every sheet and **look at it** (open the PNG as an image). Fix, rebuild, look again | `tools/shot.ps1 -Sheet SH_X` |
 | 8. Gate | Error scan + screenshots + save. Then a human-eye pass with the checklist in `reference/layout-standard.md` | `tools/final-check.ps1` |
 
@@ -55,7 +58,7 @@ Checkpoint after each milestone: `Save-QvCheckpoint -Doc $doc -Label <name>` (co
   `Invoke-QvLocked`, `Invoke-QvRetry { }`, `Save-QvCheckpoint`, `Save-QvScreenshot -Path`.
 * **lib-qv.ps1** (style `$QS`, colours `$QS.C`, glyphs `$QS.Glyph`): `Reset-QvSheet $doc 'SH_X' 'Name'`, `Enter-QvParking`/`Exit-QvParking`,
   `New-QvHeader` (band + nav + title + help, configured by `$QvAppInfo`/`$QvNav` in `build/app-settings.ps1`), `New-QvHelp`,
-  `New-QvKpiTile`, `New-QvMiniKpi`, `New-QvText`, `New-QvButton -Actions @(@{Type='sheet';P=@('SH_X')})`,
+  `New-QvKpiTile`, `New-QvMiniKpi`, `New-QvInsightCard` (rank + headline sentence + proof chart), `New-QvText`, `New-QvButton -Actions @(@{Type='sheet';P=@('SH_X')})`,
   `New-QvChart $doc $sh Id <bar|line|combo|pie|scatter|grid|gauge|radar|mekko|funnel|block|pivot|straight> @(x,y,w,h) -Caption -Dims -Exprs`,
   `New-QvSlider`, `New-QvInputBox`, `New-QvContainer`, `Set-QvSheetOrder`, `Repair-QvCurSelWidths`,
   `Get-QvMoneyM`, `Get-QvGrowthText`, `Get-QvPpText`, `Set-QvNumFmt` kinds: money, moneyM, pct, pp, growth, int, dec1.
@@ -92,5 +95,5 @@ mark sheets with `SHEET READY SH_x`, and require one build plus one fix pass per
 
 ## 9. Done means
 `final-check.ps1` reports 0 errors on every sheet, you have looked at every screenshot, the checklist in
-`reference/layout-standard.md` passes, `verify.ps1` totals reconcile, the document is saved, and a checkpoint exists.
+`reference/layout-standard.md` passes (plus the layout's own checks in `reference/layouts.md`), `verify.ps1` totals reconcile, the document is saved, and a checkpoint exists.
 Report what was built, the numbers, any accepted deviations, and the file paths.

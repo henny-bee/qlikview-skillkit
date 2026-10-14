@@ -637,6 +637,35 @@ function New-QvMiniKpi {
     if ($Delta) { New-QvText $Doc $Sheet "${Id}_DLT" @(($X+190),($Y+30),($W-200),24) -Text $Delta -BgAlpha 0 -Fg $QS.C.Text -FgExpr $col -Size 8.5 -Bold -Margin 0 -HAlign 2 | Out-Null }
 }
 
+# Insight card (insight-page layout, see reference/layouts.md): status-coloured rank badge + accent bar,
+# a headline SENTENCE with the number, a detail line, and an optional small chart that proves the insight.
+#   Headline/Detail: plain text or a '=' QlikView expression, e.g. "='Region West dropped ' & Num(...,'0.0%') & ' vs last year'"
+#   StatusExpr: 1 good / 0 watch / -1 bad.   Chart: hashtable of New-QvChart arguments incl. Type, e.g.
+#   @{ Type='bar'; Dims=@('Region'); Exprs=@(@{ D='Sum(Sales)'; Fmt='money' }); Horizontal=$true }   (needs H >= 126)
+function New-QvInsightCard {
+    param($Doc, $Sheet, [string]$Id, [int[]]$Rect, [int]$Rank = 0, [string]$Headline, [string]$Detail,
+          [string]$StatusExpr, [hashtable]$Chart, [string]$HelpText, [double]$HeadlineSize = 12)
+    $X = $Rect[0]; $Y = $Rect[1]; $W = $Rect[2]; $H = $Rect[3]
+    $col = if ($StatusExpr) { Get-QvStatusColorExpr $StatusExpr } else { $null }
+    New-QvText $Doc $Sheet "${Id}_BG" $Rect -Bg $QS.C.Card -HelpText $HelpText | Out-Null
+    New-QvText $Doc $Sheet "${Id}_BAR" @($X,$Y,4,$H) -Bg $QS.C.Primary -BgExpr $col | Out-Null
+    $tx = $X + 14
+    if ($Rank -gt 0) {
+        New-QvText $Doc $Sheet "${Id}_RANK" @(($X+12),($Y+10),26,26) -Text ([string]$Rank) -Bg $QS.C.Navy -BgExpr $col -Fg $QS.C.White -Size 10 -Bold -HAlign 1 -Margin 0 | Out-Null
+        $tx = $X + 46
+    }
+    $tw = $X + $W - 10 - $tx
+    New-QvText $Doc $Sheet "${Id}_HEAD" @($tx,($Y+8),$tw,30) -Text $Headline -BgAlpha 0 -Fg $QS.C.Text -Size $HeadlineSize -Bold -Margin 0 | Out-Null
+    if ($Detail) { New-QvText $Doc $Sheet "${Id}_DET" @($tx,($Y+38),$tw,18) -Text $Detail -BgAlpha 0 -Fg $QS.C.Muted -Size 8.5 -Margin 0 | Out-Null }
+    if ($Chart) {
+        $cy = $Y + 60; $ch = $H - 66
+        if ($ch -lt 60) { Write-Warning "New-QvInsightCard ${Id}: card too low for a chart (needs H >= 126)"; return }
+        $ca = @{} + $Chart
+        $type = $ca['Type']; [void]$ca.Remove('Type')
+        New-QvChart -Doc $Doc -Sheet $Sheet -Id "${Id}_CH" -Type $type -Rect @(($X+10),$cy,($W-20),$ch) -NoCaption @ca | Out-Null
+    }
+}
+
 # ======================================================================================================
 # Expression snippets (QlikView) used by tiles
 # ======================================================================================================

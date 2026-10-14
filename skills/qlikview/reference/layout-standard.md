@@ -1,4 +1,7 @@
-# Layout standard: D-A-R dashboards
+# Layout standard: D-A-R dashboards (default) and shared rules
+
+Other layouts (insight page, executive one-pager, exception dashboard, per-entity scorecard) are in `layouts.md`.
+The canvas, style and zero-defect rules below apply to **every** layout.
 
 The house style that `toolkit/lib-qv.ps1` implements. The full worked example is in `examples/sales-demo/spec/style-guide.md`
 and `layout-spec.md`, with screenshots in `examples/sales-demo/screenshots/`.

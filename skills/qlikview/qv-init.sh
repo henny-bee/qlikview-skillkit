@@ -12,7 +12,7 @@ mkdir -p "$B"/{tools,script,spec,build,backup,logs,shots,status,qa}
 cp -f "$SKILL_DIR"/toolkit/* "$B/tools/"
 chmod +x "$B/tools/qvrun.sh"
 # starter templates (never overwrite your own files)
-for f in app-settings.ps1 build-SH_TEMPLATE.ps1; do [ -f "$B/build/$f" ] || cp "$SKILL_DIR/templates/$f" "$B/build/$f"; done
+for f in app-settings.ps1 build-SH_TEMPLATE.ps1 build-SH_INSIGHTS.ps1; do [ -f "$B/build/$f" ] || cp "$SKILL_DIR/templates/$f" "$B/build/$f"; done
 for f in metrics.tsv groups.json; do [ -f "$B/spec/$f" ] || cp "$SKILL_DIR/templates/$f" "$B/spec/$f"; done
 if [ -n "$DOC" ]; then
   if command -v wslpath >/dev/null 2>&1; then WIN="$(wslpath -w "$PROJ/$DOC")"; elif command -v cygpath >/dev/null 2>&1; then WIN="$(cygpath -w "$PROJ/$DOC")"; else WIN="$PROJ/$DOC"; fi
