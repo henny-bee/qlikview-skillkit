@@ -1,0 +1,13 @@
+# QlikView documents and logs (large / may contain data)
+*.qvw
+*.qvw.log
+*.qvd
+# toolkit working folders when the toolkit is tested inside this repo
+.locks/
+_build/
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

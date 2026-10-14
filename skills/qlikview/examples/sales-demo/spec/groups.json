@@ -1,0 +1,10 @@
+[
+  {"Name":"drl_Geography","Cyclic":false,"Fields":["CustomerRegion","CustomerCountry","CustomerCity","CustomerName"],"Labels":["Region","Country","City","Customer"]},
+  {"Name":"drl_Product","Cyclic":false,"Fields":["ProductCategory","ProductGroup","ProductName"],"Labels":["Category","Product Group","Product"]},
+  {"Name":"drl_Time","Cyclic":false,"Fields":["Year","YearQuarter","YearMonth","Date"],"Labels":["Year","Quarter","Month","Date"]},
+  {"Name":"drl_Sales","Cyclic":false,"Fields":["SalesTeam","SalesRepName"],"Labels":["Sales Team","Sales Rep"]},
+  {"Name":"cyc_Dimension","Cyclic":true,"Fields":["CustomerRegion","ProductCategory","Channel","SalesTeam","CustomerSegment","Brand"],"Labels":["Region","Category","Channel","Sales Team","Segment","Brand"]},
+  {"Name":"cyc_Time","Cyclic":true,"Fields":["Year","YearQuarter","YearMonth","Week","Weekday"],"Labels":["Year","Quarter","Month","Week","Weekday"]},
+  {"Name":"cyc_Returns","Cyclic":true,"Fields":["ReturnReason","ReturnReasonGroup","ProductCategory"],"Labels":["Return Reason","Reason Group","Category"]},
+  {"Name":"cyc_Customer","Cyclic":true,"Fields":["CustomerName","CustomerCountry","CustomerSegment"],"Labels":["Customer","Country","Segment"]}
+]

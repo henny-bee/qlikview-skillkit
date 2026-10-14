@@ -1,0 +1,6 @@
+[
+  {"Name":"drl_Geography","Cyclic":false,"Fields":["Region","Country","City","Customer"],"Labels":["Region","Country","City","Customer"]},
+  {"Name":"drl_Product","Cyclic":false,"Fields":["Category","ProductGroup","Product"],"Labels":["Category","Group","Product"]},
+  {"Name":"cyc_Time","Cyclic":true,"Fields":["Year","YearQuarter","YearMonth","Week"],"Labels":["Year","Quarter","Month","Week"]},
+  {"Name":"cyc_Dimension","Cyclic":true,"Fields":["Region","Category","Channel","Segment"],"Labels":["Region","Category","Channel","Segment"]}
+]

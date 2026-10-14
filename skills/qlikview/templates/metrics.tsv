@@ -1,0 +1,8 @@
+# label<TAB>QlikView expression. Run: _build/tools/qvrun.sh _build/tools/verify.ps1 -Tsv _build/spec/metrics.tsv
+# Put here every number that must reconcile: row counts, totals, identities, KPI values, demo-story checks.
+Rows facts	Count(LineID)
+Sales total	Sum(Sales)
+Identity check (0)	Sum(GrossSales) - Sum(Discount) - Sum(Sales)
+Sales CYTD	$(vSales_CYTD)
+Growth YoY	$(vSales_YoY)
+Synthetic keys (0)	SubStringCount(Concat(DISTINCT $Table, '|'), '$Syn')
